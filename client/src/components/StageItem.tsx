@@ -1,5 +1,4 @@
-// import { STATUSES } from "../data";
-// import TaskList from "./TaskList";
+import TaskList from "./TaskList";
 import SectionHeader from "./utils/SectionHeader";
 import CheckIcon from "./utils/CheckIcon";
 
@@ -19,7 +18,7 @@ const StageItem = ({ name, tasks, status }: Stage) => {
         </SectionHeader>
         <div>{isCompleted ? <CheckIcon strokeWidth={3} /> : null}</div>
       </div>
-      {/* <TaskList tasks={tasks} disabled={!isCompleted} /> */}
+      <TaskList tasks={tasks} disabled={!isCompleted} />
     </>
   );
 };

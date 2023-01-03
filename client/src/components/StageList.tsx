@@ -7,7 +7,7 @@ const StageList = ({ stages }: { stages: Stage[] }) => {
       {stages.map((stage, index) => {
         const { name, tasks, status, id } = stage;
         return (
-          <li key={name}>
+          <li key={id}>
             <StageItem
               id={id}
               name={name}

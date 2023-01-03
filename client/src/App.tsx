@@ -1,3 +1,28 @@
+import StageList from "./components/StageList";
+import { StatusEnum } from "./utils/enums";
+
+const test = [
+  {
+    id: "cool",
+    name: "Tets me",
+    status: StatusEnum.COMPLETED,
+    tasks: [
+      {
+        id: "1",
+        title: "Cool",
+        isCompleted: false,
+        stageId: "123",
+      },
+      {
+        id: "2",
+        title: "Awesome",
+        isCompleted: false,
+        stageId: "123",
+      },
+    ],
+  },
+];
+
 function App() {
   return (
     <main className=" flex flex-row h-screen mx-auto p-16 max-w-3xl">
@@ -6,6 +31,7 @@ function App() {
           <h1 className="text-4xl font-bold text-slate-900 pt-8">
             My Startup Progress
           </h1>
+          <StageList stages={test} />
         </div>
       </div>
     </main>
