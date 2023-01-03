@@ -1,24 +1,38 @@
 const stageTable = new Map();
 const taskTable = new Map();
 
-stageTable.set("123", { name: "test", id: "123" });
+stageTable.set("123", { name: "Foundation", id: "123", status: "completed" });
 taskTable.set("1", {
   id: "1",
-  title: "Cool",
+  title: "Buy a domain name",
   isCompleted: false,
   stageId: "123",
 });
 
 taskTable.set("2", {
   id: "2",
-  title: "Cool",
+  title: "Create a Website",
   isCompleted: false,
   stageId: "123",
 });
 
 taskTable.set("3", {
   id: "3",
-  title: "Cool",
+  title: "Make business Card",
+  isCompleted: false,
+  stageId: "123",
+});
+
+taskTable.set("4", {
+  id: "2",
+  title: "Create a Website",
+  isCompleted: false,
+  stageId: "123",
+});
+
+taskTable.set("5", {
+  id: "3",
+  title: "Make business Card",
   isCompleted: false,
   stageId: "123",
 });
