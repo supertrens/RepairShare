@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "private": true,
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --ext js,graphql --ignore data/ ./src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.3.0",
+    "graphql": "^16.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

@@ -1,0 +1,18 @@
+type Stage {
+  id: ID!
+  name: String!
+  status: String
+  tasks: [Task!]
+}
+
+type Task {
+  id: ID!
+  title: String
+  isCompleted: Boolean
+  stage: Stage!
+}
+
+type Query {
+  stages: [Stage]
+  tasks: [Task!]
+}
