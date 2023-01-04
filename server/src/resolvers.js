@@ -2,9 +2,10 @@ import dbClient from "./utils/db.js";
 
 export const resolvers = {
   Query: {
+    stage: (_, { id }) => dbClient.stage.findById(id),
+    stages: () => dbClient.stage.findAll(),
     task: (_, { id }) => dbClient.task.findById(id),
     tasks: () => dbClient.task.findAll(),
-    stages: () => dbClient.stage.findAll(),
   },
 
   Task: {
@@ -19,5 +20,7 @@ export const resolvers = {
     createStage: (_, { name }) => dbClient.stage.createOne(name),
     createTask: (_, { title, stageId }) =>
       dbClient.task.createOne(title, stageId),
+    updateTaskStatus: (_, { isCompleted, taskId }) =>
+      dbClient.task.updateTaskStatus(isCompleted, taskId),
   },
 };

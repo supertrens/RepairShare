@@ -23,16 +23,42 @@ const createStage = (name) => {
   stageTable.set(id, {
     name,
     id,
-    status: StatusEnum.INCOMPLETE,
+    status: StatusEnum.COMPLETED,
     isActive: true,
   });
 
   return stageTable.get(id);
 };
 
+const updateTaskStatus = (isCompleted, taskId) => {
+  const task = taskTable.get(taskId);
+  task.isCompleted = isCompleted;
+
+  // housekeeping
+  const stage = findStageById(task.stageId);
+  let stageStatus = StatusEnum.INCOMPLETE;
+
+  // see if there is any incomplete task for the stage
+  if (isCompleted) {
+    const stageTasks = findTasksByStageId(task.stageId);
+    stageStatus = stageTasks.some((task) => !task.isCompleted)
+      ? StatusEnum.INCOMPLETE
+      : StatusEnum.COMPLETED;
+  }
+
+  stage.status = stageStatus;
+
+  return task;
+};
+
 const createTask = (title, stageId) => {
   const id = uuidv4();
   taskTable.set(id, { title, id, stageId, isCompleted: false });
+
+  // update the completion status because with new task it becomes incomplete
+  //TODO: make sure the key stageId exist in db(our map)
+  const stage = stageTable.get(stageId);
+  stage.status = StatusEnum.INCOMPLETE;
 
   return taskTable.get(id);
 };
@@ -48,6 +74,7 @@ const DB = {
     findAll: findAllTasks,
     findById: findTaskById,
     createOne: createTask,
+    updateTaskStatus,
   },
 };
 
