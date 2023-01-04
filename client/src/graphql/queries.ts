@@ -21,3 +21,12 @@ export const CREATE_STAGE_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_TASK_MUTATION = gql`
+  mutation CreateTaskMutation($stageId: ID!, $title: String) {
+    createTask(stageId: $stageId, title: $title) {
+      title
+      id
+    }
+  }
+`;
