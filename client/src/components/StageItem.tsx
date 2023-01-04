@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { CheckIcon } from "@heroicons/react/20/solid";
 
 import { ADD_TASK } from "../graphql/queries";
 import TaskList from "./TaskList";
 import SectionHeader from "./utils/SectionHeader";
-import CheckIcon from "./utils/CheckIcon";
 import { StatusEnum } from "../utils/enums";
 import { Stage } from "../utils/interfaces";
+import InputField from "./utils/InputField";
+import AddButton from "./utils/AddButton";
 
 const StageItem = ({
   name,
@@ -16,6 +19,7 @@ const StageItem = ({
   isActive,
 }: Stage) => {
   const [createTask, data] = useMutation(ADD_TASK);
+  const [showInput, setShowInput] = useState(false);
 
   const onAddNewTaskHandler = (title: string) => {
     createTask({
@@ -37,18 +41,28 @@ const StageItem = ({
   return (
     <>
       <div className=" flex flex-row justify-between sticky top-0 z-10 bg-white pt-8">
-        <SectionHeader
-          position={position.toString()}
-          title={name}
-          onAddNewTask={onAddNewTaskHandler}
-        >
+        <SectionHeader position={position.toString()}>
           <h3 className="font-display text-xl font-bold text-slate-900">
             {name}
           </h3>
         </SectionHeader>
 
-        <div>{isCompleted ? <CheckIcon strokeWidth={3} /> : null}</div>
+        <div>
+          {isCompleted ? (
+            <CheckIcon className="h-8 w-8" aria-hidden="true" />
+          ) : (
+            <AddButton onPress={() => setShowInput(!showInput)} />
+          )}
+        </div>
       </div>
+
+      {showInput && (
+        <InputField
+          onHandleInputText={onAddNewTaskHandler}
+          placeHolder={`${name} task - press 'Enter' to save `}
+        />
+      )}
+
       <TaskList tasks={tasks} disabled={!isActive} />
     </>
   );
