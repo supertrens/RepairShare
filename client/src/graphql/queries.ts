@@ -1,21 +1,23 @@
-import { request, gql } from "graphql-request";
+import { gql } from "@apollo/client";
 
-const GRAPHQL_URL = "http://localhost:4000";
-
-export async function getStages() {
-  const query = gql`
-    query StageWithTaskQuery {
-      stages {
-        name
+export const STAGE_WITH_TASK_QUERY = gql`
+  query StageWithTaskQuery {
+    stages {
+      id
+      name
+      tasks {
         id
-        tasks {
-          title
-          id
-        }
+        title
       }
     }
-  `;
+  }
+`;
 
-  const { stages } = await request(GRAPHQL_URL, query);
-  return stages
-}
+export const CREATE_STAGE_MUTATION = gql`
+  mutation CreateStageMutation($name: String!) {
+    stage: createStage(name: $name) {
+      id
+      name
+    }
+  }
+`;
