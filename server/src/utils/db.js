@@ -1,46 +1,12 @@
+import { v4 as uuidv4 } from "uuid";
+
 const stageTable = new Map();
 const taskTable = new Map();
 
-stageTable.set("123", { name: "Foundation", id: "123", status: "completed" });
-taskTable.set("1", {
-  id: "1",
-  title: "Buy a domain name",
-  isCompleted: false,
-  stageId: "123",
-});
-
-taskTable.set("2", {
-  id: "2",
-  title: "Create a Website",
-  isCompleted: false,
-  stageId: "123",
-});
-
-taskTable.set("3", {
-  id: "3",
-  title: "Make business Card",
-  isCompleted: false,
-  stageId: "123",
-});
-
-taskTable.set("4", {
-  id: "2",
-  title: "Create a Website",
-  isCompleted: false,
-  stageId: "123",
-});
-
-taskTable.set("5", {
-  id: "3",
-  title: "Make business Card",
-  isCompleted: false,
-  stageId: "123",
-});
-
 const findAllTasks = () => taskTable.values();
+const findTaskById = (taskId) => taskTable.get(taskId);
 
 const findAllStages = () => stageTable.values();
-
 const findStageById = (stageId) => stageTable.get(stageId);
 
 const findTasksByStageId = (id) => {
@@ -48,14 +14,31 @@ const findTasksByStageId = (id) => {
   return tasks.filter((task) => task.stageId === id);
 };
 
+const createStage = (name) => {
+  const id = uuidv4();
+  stageTable.set(id, { name, id, status: "completed" });
+
+  return stageTable.get(id);
+};
+
+const createTask = (title, stageId) => {
+  const id = uuidv4();
+  taskTable.set(id, { title, id, stageId, isCompleted: false });
+
+  return taskTable.get(id);
+};
+
 const DB = {
   stage: {
     findAll: findAllStages,
     findById: findStageById,
     findTasksByStageId,
+    createOne: createStage,
   },
   task: {
     findAll: findAllTasks,
+    findById: findTaskById,
+    createOne: createTask,
   },
 };
 

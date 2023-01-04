@@ -18,6 +18,7 @@ function App() {
           <h1 className="text-4xl font-bold text-slate-900 pt-8">
             My Startup Progress
           </h1>
+          <button>Add new</button>
           <StageList stages={stages} />
         </div>
       </div>
