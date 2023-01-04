@@ -13,7 +13,7 @@ function App() {
     fetchPolicy: "network-only",
   });
 
-  const [addStage, mutationData] = useMutation(ADD_STAGE);
+  const [addStage] = useMutation(ADD_STAGE);
 
   const onHandleInputText = (inputText: string) => {
     addStage({
@@ -48,6 +48,7 @@ function App() {
             placeHolder="New stage, press 'Enter' to save "
           />
         </div>
+        {/* TODO: virtualized the list since it can be super long. - We can use something like react-virtualized */}
         {!error && data && <StageList stages={data.stages} />}
       </div>
     </main>

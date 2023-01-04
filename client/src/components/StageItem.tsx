@@ -40,7 +40,7 @@ const StageItem = ({
 
   return (
     <>
-      <div className=" flex flex-row justify-between sticky top-0 z-10 bg-white pt-8">
+      <div className="flex flex-row justify-between sticky top-0 z-10 bg-white pt-8">
         <SectionHeader position={position.toString()}>
           <h3 className="font-display text-xl font-bold text-slate-900">
             {name}

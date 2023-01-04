@@ -25,7 +25,3 @@ type Mutation {
   addTask(title: String!, stageId: ID!): Task
   updateTaskStatus(isCompleted: Boolean!, taskId: ID!): Task
 }
-
-input UpdateTaskInput {
-  id: ID!
-}
