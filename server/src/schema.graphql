@@ -2,6 +2,7 @@ type Stage {
   id: ID!
   name: String!
   status: String
+  isActive: Boolean
   tasks: [Task!]
 }
 

@@ -13,4 +13,5 @@ export interface Stage {
   status: StatusEnum;
   tasks: Task[];
   position?: number;
+  isActive: boolean;
 }

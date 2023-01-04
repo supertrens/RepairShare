@@ -5,6 +5,8 @@ export const STAGE_WITH_TASK_QUERY = gql`
     stages {
       id
       name
+      isActive
+      status
       tasks {
         id
         title
@@ -13,16 +15,18 @@ export const STAGE_WITH_TASK_QUERY = gql`
   }
 `;
 
-export const CREATE_STAGE_MUTATION = gql`
+export const ADD_STAGE = gql`
   mutation CreateStageMutation($name: String!) {
     stage: createStage(name: $name) {
       id
       name
+      isActive
+      status
     }
   }
 `;
 
-export const CREATE_TASK_MUTATION = gql`
+export const ADD_TASK = gql`
   mutation CreateTaskMutation($stageId: ID!, $title: String) {
     createTask(stageId: $stageId, title: $title) {
       title

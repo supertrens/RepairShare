@@ -1,5 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 
+const StatusEnum = {
+  COMPLETED: "completed",
+  INCOMPLETE: "incomplete",
+};
 const stageTable = new Map();
 const taskTable = new Map();
 
@@ -16,7 +20,12 @@ const findTasksByStageId = (id) => {
 
 const createStage = (name) => {
   const id = uuidv4();
-  stageTable.set(id, { name, id, status: "completed" });
+  stageTable.set(id, {
+    name,
+    id,
+    status: StatusEnum.INCOMPLETE,
+    isActive: true,
+  });
 
   return stageTable.get(id);
 };

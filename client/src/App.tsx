@@ -1,16 +1,29 @@
 import { useMutation, useQuery } from "@apollo/client";
-import AddNewStage from "./components/AddNewStage";
 
+import { ADD_STAGE, STAGE_WITH_TASK_QUERY } from "./graphql/queries";
 import StageList from "./components/StageList";
-import {
-  CREATE_STAGE_MUTATION,
-  STAGE_WITH_TASK_QUERY,
-} from "./graphql/queries";
+import InputField from "./components/utils/InputField";
 
 function App() {
   const { data, error } = useQuery(STAGE_WITH_TASK_QUERY, {
     fetchPolicy: "network-only",
   });
+
+  const [createStage, mutationData] = useMutation(ADD_STAGE);
+
+  const onHandleInputText = (inputText: string) => {
+    createStage({
+      variables: { name: inputText },
+      update: (cache, { data: { stage } }) => {
+        console.log(cache);
+        console.log("HERE", stage);
+        // cache.writeQuery({
+        //   query: STAGE_WITH_TASK_QUERY,
+        //   data: { stage },
+        // });
+      },
+    });
+  };
 
   return (
     <main className="flex flex-row h-screen mx-auto p-16 max-w-3xl">
@@ -18,7 +31,14 @@ function App() {
         <h1 className="text-3xl font-bold text-slate-900 pt-8">
           {error ? "Sorry something went wrong" : "My Startup Progress"}
         </h1>
-        <AddNewStage />
+
+        {/* Add new stage */}
+        <div>
+          <InputField
+            onHandleInputText={onHandleInputText}
+            placeHolder="New stage, press 'Enter' to save "
+          />
+        </div>
         {!error && data && <StageList stages={data.stages} />}
       </div>
     </main>

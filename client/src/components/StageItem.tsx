@@ -6,10 +6,17 @@ import CheckIcon from "./utils/CheckIcon";
 
 import { StatusEnum } from "../utils/enums";
 import { Stage } from "../utils/interfaces";
-import { CREATE_TASK_MUTATION } from "../graphql/queries";
+import { ADD_TASK } from "../graphql/queries";
 
-const StageItem = ({ name, tasks, status, id }: Stage) => {
-  const [createTask, data] = useMutation(CREATE_TASK_MUTATION);
+const StageItem = ({
+  name,
+  tasks,
+  status,
+  id,
+  position = 1,
+  isActive,
+}: Stage) => {
+  const [createTask, data] = useMutation(ADD_TASK);
 
   const onAddNewTaskHandler = (title: string) => {
     createTask({
@@ -23,8 +30,8 @@ const StageItem = ({ name, tasks, status, id }: Stage) => {
     });
   };
 
-  const position = 1;
   const isCompleted = status === StatusEnum.COMPLETED;
+
   return (
     <>
       <div className=" flex flex-row justify-between sticky top-0 z-10 bg-white pt-8">
@@ -40,7 +47,7 @@ const StageItem = ({ name, tasks, status, id }: Stage) => {
 
         <div>{isCompleted ? <CheckIcon strokeWidth={3} /> : null}</div>
       </div>
-      <TaskList tasks={tasks} disabled={!isCompleted} />
+      <TaskList tasks={tasks} disabled={!isActive} />
     </>
   );
 };

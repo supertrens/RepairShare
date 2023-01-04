@@ -3,9 +3,9 @@ import StageItem from "./StageItem";
 
 const StageList = ({ stages }: { stages: Stage[] }) => {
   return (
-    <ul role="list" className="mt-8">
+    <ul role="list">
       {stages.map((stage, index) => {
-        const { name, tasks, status, id } = stage;
+        const { name, tasks, status, id, isActive } = stage;
         return (
           <li key={id}>
             <StageItem
@@ -14,6 +14,7 @@ const StageList = ({ stages }: { stages: Stage[] }) => {
               tasks={tasks}
               position={index + 1}
               status={status}
+              isActive={isActive}
             />
           </li>
         );
