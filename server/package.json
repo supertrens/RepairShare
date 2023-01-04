@@ -4,7 +4,8 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "nodemon --ext js,graphql --ignore data/ ./src/index.js"
+    "start": "node ./src/index.js",
+    "start:dev": "nodemon --ext js,graphql --ignore data/ ./src/index.js"
   },
   "keywords": [],
   "author": "",
