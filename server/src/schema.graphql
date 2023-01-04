@@ -21,9 +21,9 @@ type Query {
 }
 
 type Mutation {
-  createStage(name: String!): Stage
-  createTask(title: String, stageId: ID!): Task
-  updateTaskStatus(isCompleted: Boolean, taskId: ID!): Task
+  addStage(name: String!): Stage
+  addTask(title: String!, stageId: ID!): Task
+  updateTaskStatus(isCompleted: Boolean!, taskId: ID!): Task
 }
 
 input UpdateTaskInput {

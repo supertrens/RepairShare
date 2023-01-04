@@ -7,6 +7,7 @@ const StatusEnum = {
 const stageTable = new Map();
 const taskTable = new Map();
 
+// DB API FUNCTIONS
 const findAllTasks = () => taskTable.values();
 const findTaskById = (taskId) => taskTable.get(taskId);
 
@@ -18,40 +19,20 @@ const findTasksByStageId = (id) => {
   return tasks.filter((task) => task.stageId === id);
 };
 
-const createStage = (name) => {
+const addStage = (name) => {
   const id = uuidv4();
+
   stageTable.set(id, {
     name,
     id,
-    status: StatusEnum.COMPLETED,
-    isActive: true,
+    status: StatusEnum.INCOMPLETE,
+    isActive: shouldStageInitAsActive(),
   });
 
   return stageTable.get(id);
 };
 
-const updateTaskStatus = (isCompleted, taskId) => {
-  const task = taskTable.get(taskId);
-  task.isCompleted = isCompleted;
-
-  // housekeeping
-  const stage = findStageById(task.stageId);
-  let stageStatus = StatusEnum.INCOMPLETE;
-
-  // see if there is any incomplete task for the stage
-  if (isCompleted) {
-    const stageTasks = findTasksByStageId(task.stageId);
-    stageStatus = stageTasks.some((task) => !task.isCompleted)
-      ? StatusEnum.INCOMPLETE
-      : StatusEnum.COMPLETED;
-  }
-
-  stage.status = stageStatus;
-
-  return task;
-};
-
-const createTask = (title, stageId) => {
+const addTask = (title, stageId) => {
   const id = uuidv4();
   taskTable.set(id, { title, id, stageId, isCompleted: false });
 
@@ -63,17 +44,82 @@ const createTask = (title, stageId) => {
   return taskTable.get(id);
 };
 
+const updateTaskStatus = (isCompleted, taskId) => {
+  const task = taskTable.get(taskId);
+  task.isCompleted = isCompleted;
+
+  // if the task is completed we check if the 'stage' has remaining incomplete task
+  if (task.isCompleted && isStageComplete(task.stageId)) {
+    markStageAsCompleted(task.stageId);
+    setNextActiveStage(task.stageId);
+  }
+
+  return task;
+};
+
+// HELPERS FUNCTIONS
+/**
+ * Simple function to go to the TaskTable and query all the task for a given stageID
+ * We check if there is any of those task that are incomplete.
+ * If all tasks are completed we return true (stage can be marked as completed)
+ * @param {string} stageId
+ * @returns boolean
+ */
+const isStageComplete = (stageId) => {
+  const isAnyIncompleteTaskFound = findTasksByStageId(stageId).some(
+    (task) => !task.isCompleted
+  );
+
+  return !isAnyIncompleteTaskFound;
+};
+
+/**
+ * Simple function to move the active flag to the the next stage
+ * @param {*} previousActiveStageId
+ */
+const setNextActiveStage = (previousActiveStageId) => {
+  const stagesKeys = [...stageTable.keys()];
+  const previousActiveIndex = stagesKeys.indexOf(previousActiveStageId);
+  const nextActiveIndex = previousActiveIndex + 1;
+
+  if (nextActiveIndex < stagesKeys.length) {
+    const nextActiveKey = stagesKeys[nextActiveIndex];
+    const nextActiveStage = stageTable.get(nextActiveKey);
+    nextActiveStage.isActive = true;
+  }
+};
+
+const markStageAsCompleted = (stageId) => {
+  const stage = findStageById(stageId);
+  stage.status = StatusEnum.COMPLETED;
+  stage.isActive = false;
+};
+
+/**
+ * Function to set the active flag for stage onCreate.
+ * @returns boolean
+ */
+const shouldStageInitAsActive = () => {
+  // we check if there is any current active one
+  // if not we set the new one as active
+  const anyCurrentActive = [...stageTable.values()].some(
+    (stage) => stage.isActive
+  );
+
+  return !anyCurrentActive;
+};
+
 const DB = {
   stage: {
     findAll: findAllStages,
     findById: findStageById,
     findTasksByStageId,
-    createOne: createStage,
+    createOne: addStage,
   },
   task: {
     findAll: findAllTasks,
     findById: findTaskById,
-    createOne: createTask,
+    createOne: addTask,
     updateTaskStatus,
   },
 };

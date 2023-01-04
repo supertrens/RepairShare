@@ -18,6 +18,7 @@ const TaskList = ({
         {tasks.map((task, idx) => (
           <li key={idx}>
             <TaskItem
+              id={task.id}
               title={task.title}
               isCompleted={task.isCompleted}
               disabled={disabled}

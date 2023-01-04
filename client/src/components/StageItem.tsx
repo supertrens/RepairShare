@@ -1,12 +1,11 @@
 import { useMutation } from "@apollo/client";
 
+import { ADD_TASK } from "../graphql/queries";
 import TaskList from "./TaskList";
 import SectionHeader from "./utils/SectionHeader";
 import CheckIcon from "./utils/CheckIcon";
-
 import { StatusEnum } from "../utils/enums";
 import { Stage } from "../utils/interfaces";
-import { ADD_TASK } from "../graphql/queries";
 
 const StageItem = ({
   name,
@@ -21,12 +20,15 @@ const StageItem = ({
   const onAddNewTaskHandler = (title: string) => {
     createTask({
       variables: { title, stageId: id },
-      // update: (cache, { data: { stages } }) => {
-      //   cache.writeQuery({
-      //     query: STAGE_WITH_TASK_QUERY,
-      //     data: { stages },
-      //   });
-      // },
+      update: (cache, _) => {
+        // TODO: use writeQuery instead of manually modifying the cache
+        cache.modify({
+          fields: {
+            stage(_) {},
+            stages(_) {},
+          },
+        });
+      },
     });
   };
 

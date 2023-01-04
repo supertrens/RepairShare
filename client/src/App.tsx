@@ -1,26 +1,33 @@
 import { useMutation, useQuery } from "@apollo/client";
 
-import { ADD_STAGE, STAGE_WITH_TASK_QUERY } from "./graphql/queries";
+import {
+  ADD_STAGE,
+  GET_ALL_STAGES,
+  STAGE_DETAIL_FRAGMENT,
+} from "./graphql/queries";
 import StageList from "./components/StageList";
 import InputField from "./components/utils/InputField";
 
 function App() {
-  const { data, error } = useQuery(STAGE_WITH_TASK_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const { data, error } = useQuery(GET_ALL_STAGES);
 
-  const [createStage, mutationData] = useMutation(ADD_STAGE);
+  const [addStage, mutationData] = useMutation(ADD_STAGE);
 
   const onHandleInputText = (inputText: string) => {
-    createStage({
+    addStage({
       variables: { name: inputText },
       update: (cache, { data: { stage } }) => {
-        console.log(cache);
-        console.log("HERE", stage);
-        // cache.writeQuery({
-        //   query: STAGE_WITH_TASK_QUERY,
-        //   data: { stage },
-        // });
+        cache.modify({
+          fields: {
+            stages(existingStages = []) {
+              const newStageRef = cache.writeFragment({
+                data: stage,
+                fragment: STAGE_DETAIL_FRAGMENT,
+              });
+              return [...existingStages, newStageRef];
+            },
+          },
+        });
       },
     });
   };
