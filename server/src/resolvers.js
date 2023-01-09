@@ -17,7 +17,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    addStage: (_, { name }) => dbClient.stage.createOne(name),
+    addStage: (_, { name }) => dbClient.stage.createOne(name, false),
     addTask: (_, { title, stageId }) => dbClient.task.createOne(title, stageId),
     updateTaskStatus: (_, { isCompleted, taskId }) =>
       dbClient.task.updateTaskStatus(isCompleted, taskId),

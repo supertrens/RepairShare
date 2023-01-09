@@ -15,6 +15,7 @@ const INITIAL_DATA = {
       { title: "Create roadmap", isCompleted: true },
       { title: "Competitor analysis", isCompleted: false },
     ],
+    isActive: true,
   },
   Delivery: {
     tasks: [
@@ -26,9 +27,9 @@ const INITIAL_DATA = {
 
 export function seedData() {
   Object.keys(INITIAL_DATA).forEach((stageName) => {
-    const stageData = INITIAL_DATA[stageName];
-    const { id: stageID } = db.stage.createOne(stageName, stageData.status);
-    stageData.tasks.forEach(({ title, isCompleted }) =>
+    const { status, tasks, isActive } = INITIAL_DATA[stageName];
+    const { id: stageID } = db.stage.createOne(stageName, isActive, status);
+    tasks.forEach(({ title, isCompleted }) =>
       db.task.createOne(title, stageID, isCompleted)
     );
   });

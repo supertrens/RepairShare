@@ -19,14 +19,14 @@ const findTasksByStageId = (id) => {
   return tasks.filter((task) => task.stageId === id);
 };
 
-const addStage = (name, status = StatusEnum.INCOMPLETE) => {
+const addStage = (name, isActive, status = StatusEnum.INCOMPLETE) => {
   const id = uuidv4();
 
   stageTable.set(id, {
     name,
     id,
     status,
-    isActive: shouldStageInitAsActive(),
+    isActive: isActive || shouldStageInitAsActive(),
   });
 
   return stageTable.get(id);
