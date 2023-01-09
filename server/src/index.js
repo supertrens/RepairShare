@@ -3,6 +3,7 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
 import { resolvers } from "./resolvers.js";
+import { seedData } from "./utils/seedData.js";
 
 const typeDefs = await readFile(
   new URL("schema.graphql", import.meta.url),
@@ -13,6 +14,8 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
+
+seedData();
 
 // Passing an ApolloServer instance to the `startStandaloneServer` function:
 //  1. creates an Express app

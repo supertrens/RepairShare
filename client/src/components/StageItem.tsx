@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { CheckIcon } from "@heroicons/react/20/solid";
 
@@ -9,6 +9,8 @@ import { StatusEnum } from "../utils/enums";
 import { Stage } from "../utils/interfaces";
 import InputField from "./utils/InputField";
 import AddButton from "./utils/AddButton";
+import { randomQuote } from "../utils/api";
+import Modal from "./utils/Modal";
 
 const StageItem = ({
   name,
@@ -18,8 +20,21 @@ const StageItem = ({
   position = 1,
   isActive,
 }: Stage) => {
-  const [createTask, data] = useMutation(ADD_TASK);
+  const [createTask] = useMutation(ADD_TASK);
   const [showInput, setShowInput] = useState(false);
+  const [quote, setQuote] = useState("");
+
+  const isCompleted = status === StatusEnum.COMPLETED;
+
+  useEffect(() => {
+    if (status === StatusEnum.COMPLETED) {
+      randomQuote().then((q) => {
+        setQuote(q.text);
+      });
+    } else {
+      setQuote("");
+    }
+  }, [status]);
 
   const onAddNewTaskHandler = (title: string) => {
     createTask({
@@ -36,10 +51,9 @@ const StageItem = ({
     });
   };
 
-  const isCompleted = status === StatusEnum.COMPLETED;
-
   return (
     <>
+      {quote && <Modal title="Random Quote" text={quote} />}
       <div className="flex flex-row justify-between sticky top-0 z-10 bg-white pt-8">
         <SectionHeader position={position.toString()}>
           <h3 className="font-display text-xl font-bold text-slate-900">

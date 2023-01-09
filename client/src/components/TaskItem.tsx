@@ -16,10 +16,11 @@ const Task = ({
 }) => {
   const [checked, setChecked] = useState(isCompleted);
 
+  const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS);
   const handleChange = (_e: any) => {
     updateTaskStatus({
       variables: { isCompleted: !checked, taskId: id },
-      update: (cache, _) => {
+      update: (cache) => {
         // TODO: use writeQuery instead of manually modifying the cache
         cache.modify({
           fields: {
@@ -31,8 +32,6 @@ const Task = ({
     });
     setChecked(!checked);
   };
-
-  const [updateTaskStatus] = useMutation(UPDATE_TASK_STATUS);
 
   return (
     <div className="flex py-2 ">

@@ -32,9 +32,9 @@ const addStage = (name) => {
   return stageTable.get(id);
 };
 
-const addTask = (title, stageId) => {
+const addTask = (title, stageId, isCompleted = false) => {
   const id = uuidv4();
-  taskTable.set(id, { title, id, stageId, isCompleted: false });
+  taskTable.set(id, { title, id, stageId, isCompleted });
 
   // update the completion status because with new task it becomes incomplete
   //TODO: make sure the key stageId exist in db(our map)
@@ -47,11 +47,19 @@ const addTask = (title, stageId) => {
 const updateTaskStatus = (isCompleted, taskId) => {
   const task = taskTable.get(taskId);
   task.isCompleted = isCompleted;
+  const stageID = task.stageId;
 
+  if (task.isCompleted && isStageComplete(stageID)) {
+    markStageAs(stageID, StatusEnum.COMPLETED);
+    setNextActiveStage(stageID);
+  } else {
+    markStageAs(stageID, StatusEnum.INCOMPLETE);
+  }
   // if the task is completed we check if the 'stage' has remaining incomplete task
-  if (task.isCompleted && isStageComplete(task.stageId)) {
-    markStageAsCompleted(task.stageId);
-    setNextActiveStage(task.stageId);
+  if (task.isCompleted && isStageComplete(stageID)) {
+  } else {
+    const stage = findStageById(stageID);
+    stage.status = StatusEnum.INCOMPLETE;
   }
 
   return task;
@@ -89,10 +97,11 @@ const setNextActiveStage = (previousActiveStageId) => {
   }
 };
 
-const markStageAsCompleted = (stageId) => {
+const markStageAs = (stageId, status) => {
   const stage = findStageById(stageId);
-  stage.status = StatusEnum.COMPLETED;
-  stage.isActive = false;
+  stage.status = status;
+
+  console.log(stage);
 };
 
 /**
