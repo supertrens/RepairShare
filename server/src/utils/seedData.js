@@ -8,6 +8,7 @@ const INITIAL_DATA = {
       { title: "Select business name", isCompleted: true },
       { title: "Buy domains", isCompleted: true },
     ],
+    status: "completed",
   },
   Discovery: {
     tasks: [
@@ -24,9 +25,10 @@ const INITIAL_DATA = {
 };
 
 export function seedData() {
-  Object.keys(INITIAL_DATA).forEach((stage) => {
-    const { id: stageID } = db.stage.createOne(stage);
-    INITIAL_DATA[stage].tasks.forEach(({ title, isCompleted }) =>
+  Object.keys(INITIAL_DATA).forEach((stageName) => {
+    const stageData = INITIAL_DATA[stageName];
+    const { id: stageID } = db.stage.createOne(stageName, stageData.status);
+    stageData.tasks.forEach(({ title, isCompleted }) =>
       db.task.createOne(title, stageID, isCompleted)
     );
   });

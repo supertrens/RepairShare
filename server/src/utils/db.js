@@ -19,13 +19,13 @@ const findTasksByStageId = (id) => {
   return tasks.filter((task) => task.stageId === id);
 };
 
-const addStage = (name) => {
+const addStage = (name, status = StatusEnum.INCOMPLETE) => {
   const id = uuidv4();
 
   stageTable.set(id, {
     name,
     id,
-    status: StatusEnum.INCOMPLETE,
+    status,
     isActive: shouldStageInitAsActive(),
   });
 
@@ -36,11 +36,6 @@ const addTask = (title, stageId, isCompleted = false) => {
   const id = uuidv4();
   taskTable.set(id, { title, id, stageId, isCompleted });
 
-  // update the completion status because with new task it becomes incomplete
-  //TODO: make sure the key stageId exist in db(our map)
-  const stage = stageTable.get(stageId);
-  stage.status = StatusEnum.INCOMPLETE;
-
   return taskTable.get(id);
 };
 
@@ -49,17 +44,12 @@ const updateTaskStatus = (isCompleted, taskId) => {
   task.isCompleted = isCompleted;
   const stageID = task.stageId;
 
+  // if the task is completed we check if the 'stage' has remaining incomplete task
   if (task.isCompleted && isStageComplete(stageID)) {
     markStageAs(stageID, StatusEnum.COMPLETED);
     setNextActiveStage(stageID);
   } else {
     markStageAs(stageID, StatusEnum.INCOMPLETE);
-  }
-  // if the task is completed we check if the 'stage' has remaining incomplete task
-  if (task.isCompleted && isStageComplete(stageID)) {
-  } else {
-    const stage = findStageById(stageID);
-    stage.status = StatusEnum.INCOMPLETE;
   }
 
   return task;

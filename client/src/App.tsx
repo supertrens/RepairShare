@@ -9,9 +9,7 @@ import StageList from "./components/StageList";
 import InputField from "./components/utils/InputField";
 
 function App() {
-  const { data, error } = useQuery(GET_ALL_STAGES, {
-    fetchPolicy: "network-only",
-  });
+  const { data, error } = useQuery(GET_ALL_STAGES);
 
   const [addStage] = useMutation(ADD_STAGE);
 
