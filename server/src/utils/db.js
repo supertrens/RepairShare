@@ -100,8 +100,6 @@ const setNextActiveStage = (previousActiveStageId) => {
 const markStageAs = (stageId, status) => {
   const stage = findStageById(stageId);
   stage.status = status;
-
-  console.log(stage);
 };
 
 /**
